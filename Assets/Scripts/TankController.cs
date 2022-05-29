@@ -31,7 +31,7 @@ public class TankController : MonoBehaviour
 
 	public float ReloadTimer { get => reloadTimer; set => reloadTimer = value; }
 
-     public UnityEvent OnShoot, OnCantShoot;
+     public UnityEvent OnShoot, OnCanShoot, OnCantShoot;
      public UnityEvent<float> OnReloading;
 
 	void Awake()
@@ -47,12 +47,14 @@ public class TankController : MonoBehaviour
 	{
 		if (!canShoot)
 		{
+               OnCantShoot?.Invoke();
                currentDelay -= Time.deltaTime;
                OnReloading?.Invoke(currentDelay);
 
                if (currentDelay <= 0)
 			{
                     canShoot = true;
+                    OnCanShoot?.Invoke();
 			}
 		}
 	}
@@ -82,10 +84,6 @@ public class TankController : MonoBehaviour
 
                OnShoot?.Invoke();
                OnReloading?.Invoke(currentDelay);
-          }
-          else
-          {
-               OnCantShoot?.Invoke();
           }
 
      }    
